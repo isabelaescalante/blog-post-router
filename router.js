@@ -16,7 +16,8 @@ router.get('/blog-posts', (req, res, next) => {
     res.status(500).json({
       message : 'Internal server error',
       status : 500
-    }).send("Finish");
+    });
+    next();
   }
 });
 
@@ -28,7 +29,7 @@ router.get('/blog-posts/:author', (req, res, next) => {
       message: "No author name received",
       status: 406
     });
-    return next();
+    next();
   }
 
   let authorName = req.params.author;
@@ -62,6 +63,7 @@ router.post('/blog-posts', (req, res, next) => {
         message : `Missing field ${currentField} in body`,
         status : 406
       });
+      next();
     }
   }
 
@@ -84,13 +86,14 @@ router.delete('/blog-posts/:id', (req, res, next) => {
       message: "No ID received",
       status: 406
     });
+    next();
   }
 
   let deleted = ListPosts.delete(postID);
 
   if(deleted){
     res.status(204).json({
-      message : "post deleted",
+      message : "Post deleted",
       status : 204
     });
   }
